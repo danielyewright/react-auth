@@ -1,34 +1,25 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import { Link } from 'react-router-dom';
-import AuthService from './auth';
+import './App.css';
 import authGuard from './auth-guard';
-
-const Auth = new AuthService();
+import Navbar from './navbar';
 
 class App extends Component {
   constructor() {
     super();
-    this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  handleLogout() {
-    Auth.logout();
-    this.props.history.replace('/login');
   }
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome {this.props.user.username}</h1>
-        </header>
-        <p className="App-intro">
-          {/* To get started, edit <code>src/App.js</code> and save to reload. */}
-          <button type="button" onClick={this.handleLogout}>Logout</button>
-        </p>
+      <div>
+        <Navbar />
+        <main role="main" className="container">
+          <div className="jumbotron">
+            <h1>Welcome, {this.props.user.firstName + ' ' + this.props.user.lastName}!</h1>
+            <p className="lead">This example React app is an illustration of how you can implement authentication with an API that uses JWT. Other features will be implemented as requested, or feel free to improve this app on your own. Happy coding!</p>
+            <Link className="btn btn-lg btn-primary mt-3" to="/protected" role="button">View protected page &rarr;</Link>
+          </div>
+        </main>
       </div>
     );
   }

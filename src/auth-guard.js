@@ -32,8 +32,10 @@ export default function authGuard(AuthComponent) {
 
     render() {
       if (this.state.user) {
-        return(
-          <AuthComponent history={this.props.history} user={this.state.user} />
+        return (
+          <div>
+            <AuthComponent history={this.props.history} user={this.state.user} />
+          </div>
         )
       }
       else {

@@ -2,12 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthService from './auth';
 
-class Login extends React.Component {
+class Register extends React.Component {
   constructor() {
     super();
     this.state = {
-      email: '',
-      password: '',
       isDisabled: false,
       isLoading: false,
       errMessage: ''
@@ -27,7 +25,7 @@ class Login extends React.Component {
   handleChange(event) {
     this.setState({
       [event.target.name]: event.target.value
-    })
+    });
   }
 
   handleFormSubmit(event) {
@@ -35,46 +33,15 @@ class Login extends React.Component {
     this.setState({
       isDisabled: true,
       isLoading: true
-    });
+    })
 
-    this.Auth.login(this.state.email, this.state.password)
+    this.Auth.register(this.state.email, this.state.firstName, this.state.lastName, this.state.password)
       .then(response => {
-        try {
-          if (!this.state.email && !this.state.password) {
-            this.setState({
-              isDisabled: false,
-              isLoading: false,
-              errMessage: 'Email and Password are required'
-            })
-          }
-          else if (!this.state.email && this.state.password) {
-            this.setState({
-              isDisabled: false,
-              isLoading: false,
-              errMessage: 'Email is required'
-            })
-          }
-          else if (this.state.email && !this.state.password) {
-            this.setState({
-              isDisabled: false,
-              isLoading: false,
-              errMessage: 'Password is required'
-            })
-          }
-          else {
-            this.setState({
-              isDisabled: false,
-              isLoading: false,
-              errMessage: response.message
-            })
-            this.props.history.replace('/');
-          }
-        }
-        catch(err) {
-          this.setState({
-            errMessage: err.message
-          })
-        }
+        this.setState({
+          isDisabled: false,
+          isLoading: false
+        })
+        this.props.history.replace('/login');
       })
       .catch(err => {
         this.setState({
@@ -89,19 +56,23 @@ class Login extends React.Component {
     return (
       <div>
         <div className="login-form">
-          <form className="form-signin" onSubmit={this.handleFormSubmit} noValidate>
-            <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+          <form className="form-register" onSubmit={this.handleFormSubmit} noValidate>
+            <h1 className="h3 mb-3 font-weight-normal">Setup a new account</h1>
             <label htmlFor="email" className="sr-only">Email address</label>
             <input type="email" name="email" id="email" className="form-control" placeholder="Email address" onChange={this.handleChange} required autoFocus />
+            <label htmlFor="firstName" className="sr-only">First Name</label>
+            <input type="text" name="firstName" id="firstName" className="form-control" placeholder="First Name" onChange={this.handleChange} required />
+            <label htmlFor="lastName" className="sr-only">Last Name</label>
+            <input type="text" name="lastName" id="lastName" className="form-control" placeholder="Last Name" onChange={this.handleChange} required />
             <label htmlFor="password" className="sr-only">Password</label>
             <input type="password" name="password" id="password" className="form-control" placeholder="Password" onChange={this.handleChange} required />
             {
               this.state.isLoading ? (
-                <button type="submit" className="btn btn-lg btn-dark btn-block" disabled={this.state.isDisabled}>Logging in...</button>
-              ) : <button type="submit" className="btn btn-lg btn-dark btn-block" disabled={this.state.isDisabled}>Login</button>
+                <button type="submit" className="btn btn-lg btn-dark btn-block" disabled={this.state.isDisabled}>Creating account...</button>
+              ) : <button type="submit" className="btn btn-lg btn-dark btn-block" disabled={this.state.isDisabled}>Create account</button>
             }
             <div className="mt-3">
-              <Link to="/register" replace>Register an account</Link>
+              <Link to="/login" replace>Login to your account</Link>
             </div>
             <div className="text-center text-danger mt-3">{this.state.errMessage}</div>
             <p className="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
@@ -112,4 +83,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default Register;
